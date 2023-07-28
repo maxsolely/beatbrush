@@ -1,11 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app api/index run -p 5001 --reload",
+    "next-dev": "next dev",
+    "dev": "concurrently \"npm run next-dev\" \"npm run flask-dev\"",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "concurrently": "^8.2.0",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"

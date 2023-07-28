@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MyComponent = () => {
- return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+ const [message, setMessage] = useState('');
+ const [loading, setLoading] = useState(true);
+
+ useEffect(() => {
+  fetch('/api/hello')
+   .then((res) => res.json())
+   .then((data) => {
+    setMessage(data.message);
+    setLoading(false);
+   });
+ }, []);
+
+ return (
+  <div className="container">
+   <p> {!loading ? message : 'Loading..'}</p>
+  </div>
+ );
 };
 
 export default MyComponent;
