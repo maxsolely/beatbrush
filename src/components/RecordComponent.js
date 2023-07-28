@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+// import base64Encode from '@/utils/base64Encode';
 
 const mimeType = 'audio/webm';
 
@@ -30,6 +32,7 @@ const RecordComponent = () => {
 
  const startRecording = async () => {
   setRecordingStatus('recording');
+  setAudio(null);
   const media = new MediaRecorder(audioStream, { type: mimeType });
   mediaRecorder.current = media;
   mediaRecorder.current.start();
@@ -45,13 +48,25 @@ const RecordComponent = () => {
  const stopRecording = () => {
   setRecordingStatus('inactive');
   mediaRecorder.current.stop();
-  mediaRecorder.current.onstop = () => {
+  mediaRecorder.current.onstop = async () => {
    // creates a blob file from the audiochunks data
    const audioBlob = new Blob(audioChunks, { type: mimeType });
+   const formData = new FormData();
+   formData.append('audio', audioBlob, 'audio.webm');
+   //  const base64String = await base64Encode(audioBlob);
    // creates a playable Url from the blob file
    const audioUrl = URL.createObjectURL(audioBlob);
    setAudio(audioUrl);
    setAudioChunks([]);
+   const res = await axios.post('/api/identify_track', formData, {
+    headers: {
+     'Content-Type': 'multipart/form-data'
+    }
+   });
+   console.log(
+    '🚀 ~ file: RecordComponent.js:57 ~ mediaRecorder.current.onstop= ~ res:',
+    res
+   );
   };
  };
 

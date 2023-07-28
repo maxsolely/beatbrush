@@ -6,7 +6,8 @@
       // "@/commons/*": ["src/commons/*"],
       // "@/modules/*": ["src/modules/*"],
       // "@/pages/*": ["src/pages/*"],
-      "@/styles/*": ["styles/*"]
+      "@/styles/*": ["styles/*"],
+      "@/utils/*": ["src/utils/*"]
     }
   },
   "exclude": ["node_modules"]
