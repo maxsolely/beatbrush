@@ -36,3 +36,8 @@ button {
   padding: 0.5rem 1rem;
   font-weight: bold;
 }
+/* ./styles/globals.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
