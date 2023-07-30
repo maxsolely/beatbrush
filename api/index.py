@@ -8,7 +8,10 @@ import requests
 import openai
 
 load_dotenv()
+stability_engine_id = "stable-diffusion-xl-1024-v1-0"
+stability_api_host = "https://api.stability.ai"
 AUDD_API_KEY = os.environ['AUDD_API_KEY']
+STABILITY_KEY = os.environ['STABILITY_KEY']
 openai.api_key = os.environ['OPEN_AI_KEY']
 
 # This is one way to do it
@@ -78,6 +81,33 @@ def identify_track():
   else:
     return jsonify({'message': 'Failed to post data to API'}), 500
 
+@app.route("/api/generate_image", methods=["GET"])
+def generateImage():
+  response = requests.post(
+    f"{stability_api_host}/v1/generation/{stability_engine_id}/text-to-image",
+    headers={
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": f"Bearer {STABILITY_KEY}"
+    },
+    json={
+        "text_prompts": [
+            {
+                "text": "A lighthouse on a cliff"
+            }
+        ],
+        "cfg_scale": 7,
+        "height": 1024,
+        "width": 1024,
+        "samples": 1,
+        "steps": 30,
+    },
+  )
+
+  if response.status_code != 200:
+    raise Exception("Non-200 response: " + str(response.text))
+
+  return response.json(), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
